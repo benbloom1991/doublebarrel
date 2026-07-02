@@ -68,6 +68,7 @@
   body.in #logo img{ opacity:1; transform:none; transition-delay:.1s; }
   body.in #corner{ opacity:1; transform:none; transition-delay:.4s; }
   @media (prefers-reduced-motion:reduce){ #logo img,#corner{ transform:none; transition:opacity .5s ease; } }
+  @media (hover: none) and (pointer: coarse){ :root{ --fs:11px; } }
 </style>
 
 <div id="poster"></div>
@@ -85,6 +86,7 @@
       <p class="grp">Starring:<br>Wiremu Aremete<br>Maisie Whawhakia Te Wara<br>Matt Hicks</p>
     </div>
     <div id="nav">
+      <br><br>
       <a href="https://www.instagram.com/burnout_thefilm/" target="_blank" rel="noopener noreferrer">Instagram</a>
       <button id="aboutBtn" type="button" aria-label="About the film">About</button>
     </div>
