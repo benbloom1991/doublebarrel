@@ -47,7 +47,7 @@
 
   .wrap{ position:fixed; inset:0; z-index:3; }
   #logo{ position:absolute; top:var(--m); left:var(--m); right:var(--m); }
-  #logo img{ opacity:80%; width:100%; height:auto; display:block; }
+  #logo img{ width:100%; height:auto; display:block; }
 
   #corner{ position:absolute; left:var(--m); bottom:var(--mb); font-size:var(--fs); letter-spacing:.04em; text-transform:uppercase; line-height:1.4; }
   #info{ transition:opacity .4s ease; }
@@ -65,7 +65,7 @@
 
   #logo img, #corner{ opacity:0; transform:translateY(8px); transition:opacity .8s ease, transform .8s ease; }
   #logo img{ transform:scale(.99); transform-origin:center; }
-  body.in #logo img{ opacity:1; transform:none; transition-delay:.1s; }
+  body.in #logo img{ opacity:.9; transform:none; transition-delay:.1s; }
   body.in #corner{ opacity:1; transform:none; transition-delay:.4s; }
   @media (prefers-reduced-motion:reduce){ #logo img,#corner{ transform:none; transition:opacity .5s ease; } }
   @media (hover: none) and (pointer: coarse){ :root{ --fs:11px; } #about{ width:55vw; } }
