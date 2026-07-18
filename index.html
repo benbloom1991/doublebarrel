@@ -112,39 +112,21 @@
   function go(){ document.body.classList.add("in"); }
   addEventListener("load", go); setTimeout(go, 400);
 
-  /* logo — home frame rests as the logo.
-     desktop: hover flicks through the others at 200ms, returns home on leave.
-     mobile: cycles through all frames continuously at 200ms. */
+  /* logo — constant cut cycle through all frames, 400ms each, no stopping.
+     Same on desktop and mobile. Starts from whichever frame is marked .on. */
   (function(){
-    const logo=document.getElementById("logo");
     const fr=[...document.querySelectorAll("#logo .f")];
-    if(!logo || fr.length<2) return;
+    if(fr.length<2) return;
     if(matchMedia("(prefers-reduced-motion:reduce)").matches) return;
-
-    const HOME=4;                       /* Frame_7 */
-    const shuffle=a=>{ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
-    let cur=HOME, timer=null;
-    const show=n=>{ if(n===cur) return; fr[cur].classList.remove("on"); cur=n; fr[cur].classList.add("on"); };
-
-    if(matchMedia("(hover: none) and (pointer: coarse)").matches){
-      /* mobile: never stops */
-      const run=()=>{ let i=cur; timer=setInterval(()=>{ i=(i+1)%fr.length; show(i); },200); };
-      run();
-      document.addEventListener("visibilitychange",()=>{ clearInterval(timer); if(!document.hidden) run(); });
-      return;
-    }
-
-    /* desktop: easter egg */
-    let order=[], oi=0;
-    function enter(){
-      clearInterval(timer);
-      order=shuffle([...fr.keys()].filter(k=>k!==HOME)); oi=0;
-      timer=setInterval(()=>{ show(order[oi]); oi=(oi+1)%order.length; if(oi===0) order=shuffle(order); },200);
-    }
-    function leave(){ clearInterval(timer); timer=null; show(HOME); }
-    logo.addEventListener("mouseenter",enter);
-    logo.addEventListener("mouseleave",leave);
-    document.addEventListener("visibilitychange",()=>{ if(document.hidden && timer) leave(); });
+    let i=fr.findIndex(f=>f.classList.contains("on")); if(i<0) i=0;
+    let timer=null;
+    const run=()=>{ timer=setInterval(()=>{
+      fr[i].classList.remove("on");
+      i=(i+1)%fr.length;
+      fr[i].classList.add("on");
+    }, 400); };            /* <-- speed in ms */
+    run();
+    document.addEventListener("visibilitychange",()=>{ clearInterval(timer); if(!document.hidden) run(); });
   })();
 
   (function(){
