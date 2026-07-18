@@ -124,7 +124,7 @@
       fr[i].classList.remove("on");
       i=(i+1)%fr.length;
       fr[i].classList.add("on");
-    }, 400); };            /* <-- speed in ms */
+    }, 700); };            /* <-- speed in ms */
     run();
     document.addEventListener("visibilitychange",()=>{ clearInterval(timer); if(!document.hidden) run(); });
   })();
