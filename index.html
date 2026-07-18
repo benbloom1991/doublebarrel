@@ -112,50 +112,21 @@
   function go(){ document.body.classList.add("in"); }
   addEventListener("load", go); setTimeout(go, 400);
 
-  /* logo frame cycle — each round holds all six frames once, in random order;
-     between holds it flicks through the other five */
+  /* logo frame cycle — steady cut through all frames, 400ms each, no stopping */
   (function(){
     const fr=[...document.querySelectorAll("#logo .f")];
-    const N=fr.length;
-    if(N<2) return;
+    if(fr.length<2) return;
     if(matchMedia("(prefers-reduced-motion:reduce)").matches) return;
-
-    const HOLD_MIN=600, HOLD_MAX=1500;   /* rest on a frame (ms) */
-    const CUT_MIN=70,   CUT_MAX=110;     /* cut speed inside a burst (ms) */
-
-    const rnd=(a,b)=>a+Math.random()*(b-a);
-    const shuffle=a=>{ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
-    const all=()=>[...Array(N).keys()];
-
-    let cur=0, timer=null;
-    /* first round: frame 0 is already held, so queue the other five */
-    let round=shuffle(all().filter(x=>x!==0));
-
-    function show(n){ fr[cur].classList.remove("on"); cur=n; fr[cur].classList.add("on"); }
-
-    function nextHold(){
-      if(!round.length){
-        round=shuffle(all());
-        if(round[0]===cur) round.push(round.shift());  /* no back-to-back repeat */
-      }
-      return round.shift();
-    }
-
-    function tick(){
-      const next=nextHold();
-      const seq=[...shuffle(all().filter(x=>x!==cur && x!==next)), next];  /* the other five */
-      let k=0;
-      (function play(){
-        show(seq[k++]);
-        if(k<seq.length) timer=setTimeout(play, rnd(CUT_MIN,CUT_MAX));
-        else timer=setTimeout(tick, rnd(HOLD_MIN,HOLD_MAX));
-      })();
-    }
-    timer=setTimeout(tick, rnd(HOLD_MIN,HOLD_MAX));
-
+    let i=0, timer=null;
+    function start(){ timer=setInterval(()=>{
+      fr[i].classList.remove("on");
+      i=(i+1)%fr.length;
+      fr[i].classList.add("on");
+    }, 400); }
+    start();
     document.addEventListener("visibilitychange",()=>{
-      clearTimeout(timer);
-      if(!document.hidden) timer=setTimeout(tick, rnd(HOLD_MIN,HOLD_MAX));
+      clearInterval(timer);
+      if(!document.hidden) start();
     });
   })();
 
